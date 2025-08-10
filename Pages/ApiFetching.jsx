@@ -8,11 +8,15 @@ import {
   Button,
   TextInput,
 } from "react-native";
+import Toast from "react-native-toast-message";
+
+import Tosat from 'react-native-toast-message'
 
 const ApiFetching = () => {
   const [data, setData] = useState([]);
+  const [error, setError] = useState("")
   const [isloading, setIsloading] = useState(true);
-  const [page, setPage] = useState(1); // start at page 1
+  const [page, setPage] = useState(1); 
   const pageLimit = 10;
 
   const [title, setTitle] = useState("");
@@ -21,14 +25,16 @@ const ApiFetching = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=${pageLimit}`
+        `https://jsonplaceholder.typicodde.com/posts?_page=${page}&_limit=${pageLimit}`
       );
       const newData = await response.json();
       setData((prevData) =>
         page === 1 ? newData : [...prevData, ...newData]
       );
+      setIsloading(false)
     } catch (error) {
-      console.error("Error fetching data:", error);
+        setError("Error fetching data")
+      console.log(error);
     } finally {
       setIsloading(false);
     }
@@ -39,12 +45,6 @@ const ApiFetching = () => {
   };
 
   const addPost = async () => {
-    if (!title.trim() || !body.trim()) {
-      alert("Please fill in both title and body.");
-      return;
-    }
-
-    try {
       const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
         method: "POST",
         headers: {
@@ -58,16 +58,14 @@ const ApiFetching = () => {
 
       const newPost = await response.json();
       console.log(newPost);
-
-      // Add new post to the top of the list
       setData((prevData) => [newPost, ...prevData]);
-
-      // Clear form fields
       setTitle("");
       setBody("");
-    } catch (error) {
-      console.error("Error adding post:", error);
-    }
+      Toast.show({
+        type: "success",
+        text1: "Post Added",
+        text2: "Post added successfully"
+      })
   };
 
   useEffect(() => {
@@ -77,11 +75,17 @@ const ApiFetching = () => {
   if (isloading) {
     return (
       <ActivityIndicator
-        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        style={{ height: 500, justifyContent: "center", alignItems: "center" }}
         size="large"
         color="#0000ff"
       />
     );
+  }
+
+  if(error){
+    return(
+        <Text style={{color:'red', textAlign:'center', marginVertical: 10}}>{error}</Text>
+    )
   }
 
   return (

@@ -15,13 +15,15 @@ import TextInputs from "@/components/TextInputs";
 import SwitchButton from "@/components/SwitchButton";
 import Login from "@/Pages/Login";
 import ApiFetching from "@/Pages/ApiFetching";
+import ScreenNavigation from "@/Pages/ScreenNavigation";
 
 import { ScrollView, StyleSheet, View } from "react-native";
 
 const index = () => {
   return (
     <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
-     <ApiFetching />
+     <ScreenNavigation />
+     {/* <ApiFetching /> */}
       {/* <Login /> */}
       {/* <TheIndicator />
       <SwitchButton />
